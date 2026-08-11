@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'https://energymanagementbackend.onrender.com/api';
 const TOKEN_KEY = 'smart_energy_token';
 const USER_KEY = 'smart_energy_user';
 
