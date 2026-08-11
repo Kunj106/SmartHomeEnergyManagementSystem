@@ -22,13 +22,13 @@ import java.util.Optional;
 public class SmsOtpService
 {
     // Twilio credentials injected from application.properties
-    @Value("${twilio.account.sid}")
+    @Value("${twilio.account.sid:}")
     private String twilioAccountSid;
 
-    @Value("${twilio.auth.token}")
+    @Value("${twilio.auth.token:}")
     private String twilioAuthToken;
 
-    @Value("${twilio.phone.number}")
+    @Value("${twilio.phone.number:}")
     private String twilioPhoneNumber;
 
     // OTP expiry window (minutes)
@@ -50,10 +50,17 @@ public class SmsOtpService
 
     @PostConstruct
     public void initTwilio() {
+        if (twilioAccountSid == null || twilioAccountSid.isBlank()
+                || twilioAuthToken == null || twilioAuthToken.isBlank()
+                || twilioPhoneNumber == null || twilioPhoneNumber.isBlank()) {
+
+            log.warn("Twilio is not configured. SMS 2FA is disabled.");
+            return;
+        }
+
         Twilio.init(twilioAccountSid, twilioAuthToken);
         log.info("Twilio SDK initialised.");
     }
-
      // Generate a 6-digit OTP, persist it, send it via Twilio SMS to the user's
      // twoFactorPhone number, and return whether the SMS was dispatched.
     @Transactional
@@ -163,6 +170,15 @@ public class SmsOtpService
     }
 
     private boolean sendSms(String toPhone, String body) {
+
+        if (twilioAccountSid == null || twilioAccountSid.isBlank()
+                || twilioAuthToken == null || twilioAuthToken.isBlank()
+                || twilioPhoneNumber == null || twilioPhoneNumber.isBlank()) {
+
+            log.warn("Twilio is not configured. Cannot send SMS OTP.");
+            return false;
+        }
+
         try {
             Message message = Message.creator(
                     new PhoneNumber(toPhone),
