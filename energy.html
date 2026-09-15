@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energy Analytics - Smart Energy</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="homeowner.html" class="logo">
+      <div class="logo-icon">⚡</div>
+      <span>SMART ENERGY</span>
+    </a>
+    <ul class="nav-menu"></ul>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container">
+    <h1 class="fade-in"> ENERGY ANALYTICS</h1>
+    <p class="text-muted" style="margin-bottom: 3rem;">Track and analyze your energy consumption</p>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-4" style="margin-bottom: 3rem;">
+      <div class="stat-card">
+        <div class="stat-value" id="totalEnergy">388</div>
+        <div class="stat-label">TOTAL (kWh)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="avgEnergy">45</div>
+        <div class="stat-label">AVERAGE (kWh)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="peakEnergy">61</div>
+        <div class="stat-label">PEAK (kWh)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="estimatedCost">₹2311</div>
+        <div class="stat-label">ESTIMATED COST</div>
+      </div>
+    </div>
+
+    <!-- Generate Test Data -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <h3 style="margin-bottom: 1rem;"> GENERATE TEST DATA</h3>
+      <p class="text-muted" style="margin-bottom: 1rem;">Create sample energy logs for testing and visualization</p>
+      <div style="display: flex; gap: 1rem;">
+        <button class="btn btn-primary" onclick="generateHourlyData()">
+          GENERATE HOURLY LOGS
+        </button>
+        <button class="btn btn-secondary" onclick="generateDailyData()">
+          GENERATE DAILY SUMMARY
+        </button>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="grid grid-2" style="margin-bottom: 3rem;">
+      <div class="card">
+        <h3 style="margin-bottom: 2rem;"> HOURLY CONSUMPTION (TODAY)</h3>
+        <div style="height: 350px;">
+          <canvas id="hourlyChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom: 2rem;"> DAILY CONSUMPTION (30 DAYS)</h3>
+        <div style="height: 350px;">
+          <canvas id="dailyChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom: 2rem;"> CONSUMPTION BY DEVICE TYPE</h3>
+      <!-- Increased height to accommodate per-device legend with multiple entries -->
+      <div style="height: 520px; max-width: 650px; margin: 0 auto;">
+        <canvas id="deviceTypeChart"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="app.js"></script>
+<script>
+  if (!AuthManager.isAuthenticated()) window.location.href = 'login.html';
+
+  async function loadAnalytics() {
+      try {
+          const summary = await APIService.getConsumptionSummary();
+          document.getElementById('totalEnergy').textContent = (summary.totalEnergy || 0).toFixed(2);
+          document.getElementById('avgEnergy').textContent = (summary.averageEnergy || 0).toFixed(2);
+          document.getElementById('peakEnergy').textContent = (summary.peakEnergy || 0).toFixed(2);
+          document.getElementById('estimatedCost').textContent = '₹2388';
+
+          ChartManager.createHourlyChart('hourlyChart');
+          ChartManager.createDailyChart('dailyChart');
+          ChartManager.createDeviceTypeChart('deviceTypeChart');
+      } catch (error) {
+          console.error('Error loading analytics:', error);
+          UIUtils.showAlert('Failed to load analytics data', 'error');
+      }
+  }
+
+  async function generateHourlyData() {
+      try {
+          await APIService.generateHourlyLogs();
+          UIUtils.showAlert('Hourly logs generated! Refreshing charts...', 'success');
+          setTimeout(() => loadAnalytics(), 1000);
+      } catch (error) {
+          UIUtils.showAlert('Failed to generate hourly data: ' + error.message, 'error');
+      }
+  }
+
+  async function generateDailyData() {
+      try {
+          await APIService.generateDailySummary();
+          UIUtils.showAlert('Daily summary generated! Refreshing charts...', 'success');
+          setTimeout(() => loadAnalytics(), 1000);
+      } catch (error) {
+          UIUtils.showAlert('Failed to generate daily data: ' + error.message, 'error');
+      }
+  }
+
+  loadAnalytics();
+</script>
+</body>
+</html>

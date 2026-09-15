@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Smart Energy Elite</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="admin.html" class="logo">
+            <div class="logo-icon">⚡</div>
+            <span>SMART ENERGY</span>
+        </a>
+        <ul class="nav-menu"></ul>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<section class="section">
+    <div class="container">
+        <!-- Header -->
+        <div class="fade-in">
+            <h1 id="welcomeMsg" style="margin-bottom: 0.5rem;">ADMIN PANEL</h1>
+            <p class="text-muted" style="margin-bottom: 3rem;">Complete system oversight and management</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-4" style="margin-bottom: 3rem;">
+            <div class="stat-card">
+                <div class="stat-value">3</div>
+                <div class="stat-label">TOTAL USERS</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">5</div>
+                <div class="stat-label">ACTIVE SYSTEMS</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">94</div>
+                <div class="stat-label">UPTIME (%)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">5,200</div>
+                <div class="stat-label">kWh MONITORED</div>
+            </div>
+        </div>
+
+        <!-- User Management Table
+        <div class="card" style="margin-bottom: 3rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h3 style="margin: 0; display: flex; align-items: center; gap: 1rem;">
+                    <span style="font-size: 2rem;">👥</span>
+                    USER MANAGEMENT
+                </h3>
+                <input
+                    type="text"
+                    id="searchUsers"
+                    placeholder="Search users..."
+                    style="width: 300px; padding: 0.75rem 1rem; border-radius: 12px;"
+                >
+            </div> -->
+
+        <!-- <div style="overflow-x: auto; border-radius: 12px;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: rgba(0, 240, 255, 0.1); border-bottom: 2px solid var(--electric-cyan);">
+                        <th style="padding: 1rem; text-align: left; color: var(--electric-cyan); font-family: var(--font-display); font-size: 0.9rem;">ID</th>
+                        <th style="padding: 1rem; text-align: left; color: var(--electric-cyan); font-family: var(--font-display); font-size: 0.9rem;">USERNAME</th>
+                        <th style="padding: 1rem; text-align: left; color: var(--electric-cyan); font-family: var(--font-display); font-size: 0.9rem;">EMAIL</th>
+                        <th style="padding: 1rem; text-align: left; color: var(--electric-cyan); font-family: var(--font-display); font-size: 0.9rem;">ROLE</th>
+                        <th style="padding: 1rem; text-align: left; color: var(--electric-cyan); font-family: var(--font-display); font-size: 0.9rem;">STATUS</th>
+                        <th style="padding: 1rem; text-align: left; color: var(--electric-cyan); font-family: var(--font-display); font-size: 0.9rem;">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <tr>
+                        <td colspan="6" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+                            <div class="loading" style="margin: 0 auto 1rem;"></div>
+                            LOADING USERS...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> -->
+    </div>
+
+    <!-- System Overview Grid -->
+    <div class="grid grid-2" style="margin-bottom: 3rem;">
+        <!-- Security Panel -->
+        <div class="card">
+            <h3 style="margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;">
+                <span style="font-size: 2rem;"></span>
+                SECURITY OVERVIEW
+            </h3>
+            <div style="display: grid; gap: 1rem;">
+                <div style="padding: 1rem; background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), transparent); border-left: 4px solid #00ff88; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 600;">Failed Login Attempts (24h)</span>
+                    <strong style="color: #00ff88; font-size: 1.5rem; font-family: var(--font-display);">3</strong>
+                </div>
+                <div style="padding: 1rem; background: linear-gradient(90deg, rgba(0, 240, 255, 0.1), transparent); border-left: 4px solid var(--electric-cyan); border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 600;">Active Login Sessions</span>
+                    <strong style="color: var(--electric-cyan); font-size: 1.5rem; font-family: var(--font-display);">234</strong>
+                </div>
+                <div style="padding: 1rem; background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), transparent); border-left: 4px solid #00ff88; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 600;">API Requests (1h)</span>
+                    <strong style="color: #00ff88; font-size: 1.5rem; font-family: var(--font-display);">23</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Health -->
+        <div class="card">
+            <h3 style="margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;">
+                <span style="font-size: 2rem;"></span>
+                SYSTEM HEALTH
+            </h3>
+            <div style="display: grid; gap: 1.5rem;">
+                <!-- Database -->
+                <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span class="text-muted" style="font-weight: 600;">DATABASE</span>
+                        <span style="color: #00ff88; font-weight: 700;">● HEALTHY</span>
+                    </div>
+                    <div style="background: rgba(0, 240, 255, 0.2); height: 12px; border-radius: 6px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);">
+                        <div style="background: linear-gradient(90deg, #00ff88, #00F0FF); height: 100%; width: 95%; border-radius: 6px; box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);"></div>
+                    </div>
+                </div>
+                <!-- API Server -->
+                <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span class="text-muted" style="font-weight: 600;">API SERVER</span>
+                        <span style="color: #00ff88; font-weight: 700;">● RUNNING</span>
+                    </div>
+                    <div style="background: rgba(0, 240, 255, 0.2); height: 12px; border-radius: 6px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);">
+                        <div style="background: linear-gradient(90deg, #00ff88, #00F0FF); height: 100%; width: 98%; border-radius: 6px; box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);"></div>
+                    </div>
+                </div>
+                <!-- Cache -->
+                <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span class="text-muted" style="font-weight: 600;">CACHE SYSTEM</span>
+                        <span style="color: #00ff88; font-weight: 700;">● OPTIMAL</span>
+                    </div>
+                    <div style="background: rgba(0, 240, 255, 0.2); height: 12px; border-radius: 6px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);">
+                        <div style="background: linear-gradient(90deg, #00ff88, #00F0FF); height: 100%; width: 92%; border-radius: 6px; box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="card">
+        <h3 style="margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;">
+            <span style="font-size: 2rem;"></span>
+            RECENT ACTIVITY
+        </h3>
+        <div style="display: grid; gap: 1rem;">
+            <div style="padding: 1.5rem; background: linear-gradient(90deg, rgba(0, 240, 255, 0.1), transparent); border-left: 4px solid var(--electric-cyan); border-radius: 12px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <strong style="font-family: var(--font-display); color: var(--electric-cyan);">NEW USER REGISTRATION</strong>
+                    <span class="text-muted" style="font-size: 0.85rem;">2 minutes ago</span>
+                </div>
+                <p style="margin: 0; color: var(--text-secondary);">john_doe registered as Homeowner</p>
+            </div>
+            <div style="padding: 1.5rem; background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), transparent); border-left: 4px solid #00ff88; border-radius: 12px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <strong style="font-family: var(--font-display); color: #00ff88;">SYSTEM BACKUP COMPLETED</strong>
+                    <span class="text-muted" style="font-size: 0.85rem;">15 minutes ago</span>
+                </div>
+                <p style="margin: 0; color: var(--text-secondary);">Automated backup successful - 2.4 GB</p>
+            </div>
+            <div style="padding: 1.5rem; background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), transparent); border-left: 4px solid #FFD700; border-radius: 12px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <strong style="font-family: var(--font-display); color: #FFD700;">HIGH API USAGE DETECTED</strong>
+                    <span class="text-muted" style="font-size: 0.85rem;">1 hour ago</span>
+                </div>
+                <p style="margin: 0; color: var(--text-secondary);">User tech_smith exceeded rate limit</p>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+<script src="app.js"></script>
+<script>
+    // Authentication check
+    if (!AuthManager.isAuthenticated()) {
+        window.location.href = 'login.html';
+    }
+
+    const user = AuthManager.getUser();
+    const hasAdminRole = RoleUtils.hasRole(user.roles, 'admin');
+
+    if (!hasAdminRole) {
+        UIUtils.showAlert('Access denied. Admin privileges required.', 'error');
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 2000);
+    }
+
+    document.getElementById('welcomeMsg').textContent = 'ADMIN PANEL';
+
+    // Load users from API
+    async function loadUsers() {
+        const tbody = document.getElementById('usersTableBody');
+
+        try {
+            const users = await APIService.getAllUsers();
+
+            if (users && users.length > 0) {
+                tbody.innerHTML = users.map((user, index) => `
+                    <tr style="border-bottom: 1px solid rgba(0, 240, 255, 0.1); transition: all 0.3s ease; animation: fadeInUp 0.5s ease ${index * 0.05}s backwards;">
+                        <td style="padding: 1rem; font-family: var(--font-display);">${user.id}</td>
+                        <td style="padding: 1rem; font-weight: 600;">${user.username}</td>
+                        <td style="padding: 1rem; color: var(--text-secondary);">${user.email}</td>
+                        <td style="padding: 1rem;">
+                            <span style="padding: 0.5rem 1rem; background: linear-gradient(90deg, var(--electric-cyan), var(--neon-blue)); color: var(--midnight); border-radius: 20px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-display);">
+                                ${user.roles.map(r => r.name.replace('ROLE_', '')).join(', ')}
+                            </span>
+                        </td>
+                        <td style="padding: 1rem;">
+                            <span style="color: ${user.enabled ? '#00ff88' : '#ff3366'}; font-weight: 700; font-family: var(--font-display);">
+                                ${user.enabled ? '● ACTIVE' : '● INACTIVE'}
+                            </span>
+                        </td>
+                        <td style="padding: 1rem;">
+                            <button
+                                onclick="deleteUser(${user.id})"
+                                class="btn"
+                                style="padding: 0.5rem 1rem; background: linear-gradient(90deg, #ff3366, #ff0055); border: none; font-size: 0.85rem;">
+                                DELETE
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } else {
+                tbody.innerHTML = '<tr><td colspan="6" style="padding: 3rem; text-align: center; color: var(--text-muted);">No users found</td></tr>';
+            }
+        } catch (error) {
+            tbody.innerHTML = `<tr><td colspan="6" style="padding: 3rem; text-align: center; color: #ff3366;">ERROR: ${error.message}</td></tr>`;
+        }
+    }
+
+    // Delete user function
+    async function deleteUser(userId) {
+        if (confirm('⚠️ Are you sure you want to delete this user? This action cannot be undone.')) {
+            try {
+                await APIService.deleteUser(userId);
+                UIUtils.showAlert('User deleted successfully', 'success');
+                loadUsers(); // Reload table
+            } catch (error) {
+                UIUtils.showAlert(`Error: ${error.message}`, 'error');
+            }
+        }
+    }
+
+    // Search functionality
+    document.getElementById('searchUsers').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('#usersTableBody tr');
+
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    });
+
+    // Load users on page load
+    loadUsers();
+</script>
+</body>
+</html>

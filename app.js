@@ -17,12 +17,12 @@ const RoleUtils = {
     }
     return 'homeowner';
   },
-  
+
   getDashboardPage(roles) {
     const role = this.extractRole(roles);
     return `${role}.html`;
   },
-  
+
   hasRole(roles, checkRole) {
     const role = this.extractRole(roles);
     return role === checkRole.toLowerCase();
@@ -76,27 +76,56 @@ class AuthManager {
 class APIService {
   static async request(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`;
+
     const headers = {
-      'Content-Type': 'application/json',
       ...AuthManager.getAuthHeader(),
-      ...options.headers
+      ...(options.headers || {})
     };
 
+    if (options.body && !headers['Content-Type']) {
+      headers['Content-Type'] = 'application/json';
+    }
+
     try {
+      console.log(`API REQUEST: ${options.method || 'GET'} ${url}`);
+
       const response = await fetch(url, {
         ...options,
         headers
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get('content-type') || '';
+      let data = null;
+
+      if (response.status !== 204) {
+        if (contentType.includes('application/json')) {
+          data = await response.json();
+        } else {
+          const text = await response.text();
+          data = text || null;
+        }
+      }
 
       if (!response.ok) {
-        throw new Error(data.message || data.error || 'Request failed');
+        let message = 'Request failed';
+
+        if (data && typeof data === 'object') {
+          message = data.message || data.error || message;
+        } else if (typeof data === 'string' && data.trim()) {
+          message = data;
+        }
+
+        if (response.status === 401) {
+          message = message || 'Unauthorized. Please sign in again.';
+        }
+
+        throw new Error(message);
       }
 
       return data;
+
     } catch (error) {
-      console.error('API Error:', error);
+      console.error('API Error:', { endpoint, url, message: error.message });
       throw error;
     }
   }
@@ -242,29 +271,29 @@ class UIUtils {
 
   static animateCounter(element, start, end, duration = 2000) {
     const startTime = performance.now();
-    
+
     const animate = (currentTime) => {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
       const easeOutQuart = 1 - Math.pow(1 - progress, 4);
       const current = Math.floor(start + (end - start) * easeOutQuart);
-      
+
       element.textContent = current.toLocaleString();
-      
+
       if (progress < 1) {
         requestAnimationFrame(animate);
       } else {
         element.textContent = end.toLocaleString();
       }
     };
-    
+
     requestAnimationFrame(animate);
   }
 
   static createParticles(element, count = 20) {
     const particles = [];
     const rect = element.getBoundingClientRect();
-    
+
     for (let i = 0; i < count; i++) {
       const particle = document.createElement('div');
       particle.style.cssText = `
@@ -277,38 +306,38 @@ class UIUtils {
         z-index: 9999;
         box-shadow: 0 0 10px var(--electric-cyan);
       `;
-      
+
       particle.style.left = `${rect.left + rect.width / 2}px`;
       particle.style.top = `${rect.top + rect.height / 2}px`;
-      
+
       document.body.appendChild(particle);
       particles.push(particle);
-      
+
       const angle = (Math.PI * 2 * i) / count;
       const velocity = 2 + Math.random() * 3;
       const vx = Math.cos(angle) * velocity;
       const vy = Math.sin(angle) * velocity;
-      
+
       let x = rect.left + rect.width / 2;
       let y = rect.top + rect.height / 2;
       let opacity = 1;
-      
+
       const animate = () => {
         x += vx;
         y += vy;
         opacity -= 0.02;
-        
+
         particle.style.left = `${x}px`;
         particle.style.top = `${y}px`;
         particle.style.opacity = opacity;
-        
+
         if (opacity > 0) {
           requestAnimationFrame(animate);
         } else {
           particle.remove();
         }
       };
-      
+
       requestAnimationFrame(animate);
     }
   }
@@ -728,7 +757,7 @@ class ChartManager {
 function updateNavigation() {
   const user = AuthManager.getUser();
   const navMenu = document.querySelector('.nav-menu');
-  
+
   if (!navMenu) return;
 
   if (user) {
@@ -736,17 +765,17 @@ function updateNavigation() {
     const dashboardLink = RoleUtils.getDashboardPage(user.roles);
 
     let navItems = `<li><a href="${dashboardLink}" class="nav-link">Dashboard</a></li>`;
-    
+
     if (role === 'homeowner') {
       navItems += `
         <li><a href="devices.html" class="nav-link">Devices</a></li>
         <li><a href="energy.html" class="nav-link">Energy</a></li>
       `;
     }
-    
-    const profilePage = role === 'homeowner' ? 'profileh.html'
-                      : role === 'admin'     ? 'profilea.html'
-                      : role === 'technician'? 'profilet.html'
+
+    const profilePage = role === 'homeowner' ? 'homeownerprofile.html'
+                      : role === 'admin'     ? 'adminprofile.html'
+                      : role === 'technician'? 'technicianprofile.html'
                       : 'profile.html';
 
     navItems += `
@@ -758,7 +787,7 @@ function updateNavigation() {
         </span>
       </li>
     `;
-    
+
     navMenu.innerHTML = navItems;
   } else {
     navMenu.innerHTML = `
@@ -774,7 +803,7 @@ function initializeAnimations() {
   cards.forEach((card, index) => {
     card.style.opacity = '0';
     card.style.transform = 'translateY(30px)';
-    
+
     setTimeout(() => {
       card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
       card.style.opacity = '1';
@@ -1414,3 +1443,8 @@ const SecurityManager = {
 window.AdminAPI        = AdminAPI;
 window.QuickActions    = QuickActions;
 window.SecurityManager = SecurityManager;
+
+// Frontend configuration check
+console.log('Smart Energy frontend loaded. API:', API_BASE_URL);
+
+

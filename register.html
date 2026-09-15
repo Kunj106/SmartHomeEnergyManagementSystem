@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Smart Energy Elite</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="login.html" class="logo">
+      <div class="logo-icon">⚡</div>
+      <span>SMART ENERGY</span>
+    </a>
+    <ul class="nav-menu"></ul>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container" style="max-width: 700px;">
+    <div class="card fade-in">
+      <h2 style="text-align: center; margin-bottom: 0.5rem;">CREATE ACCOUNT</h2>
+      <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">
+        Join the future of energy management
+      </p>
+
+      <div id="alert-container"></div>
+
+      <form id="registerForm">
+        <div class="grid grid-2">
+          <div class="form-group">
+            <label for="firstName">FIRST NAME</label>
+            <input type="text" id="firstName" placeholder="John" required>
+          </div>
+          <div class="form-group">
+            <label for="lastName">LAST NAME</label>
+            <input type="text" id="lastName" placeholder="Doe" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="username">USERNAME</label>
+          <input type="text" id="username" placeholder="Choose a unique username" required minlength="3">
+        </div>
+
+        <div class="form-group">
+          <label for="email">EMAIL</label>
+          <input type="email" id="email" placeholder="your.email@domain.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="phoneNumber">PHONE (OPTIONAL)</label>
+          <input type="tel" id="phoneNumber" placeholder="1234567890">
+        </div>
+
+        <div class="grid grid-2">
+          <div class="form-group">
+            <label for="password">PASSWORD</label>
+            <input type="password" id="password" placeholder="Min 6 characters" required minlength="6">
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">CONFIRM</label>
+            <input type="password" id="confirmPassword" placeholder="Re-enter password" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="role">ACCOUNT TYPE</label>
+          <select id="role" required>
+            <option value="">Select your role</option>
+            <option value="homeowner">🏠 HOMEOWNER - Monitor & manage energy</option>
+            <option value="technician">🔧 TECHNICIAN - System installations</option>
+            <option value="admin">👨‍💼 ADMIN - Full system control</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">
+            CREATE ACCOUNT
+          </button>
+        </div>
+      </form>
+
+      <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(0, 240, 255, 0.2);">
+        <p style="color: var(--text-muted);">
+          Already have an account?
+          <a href="login.html" style="color: var(--electric-cyan); text-decoration: none; font-weight: 700; margin-left: 0.5rem;">
+            Sign In →
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="app.js"></script>
+<script>
+  if (AuthManager.isAuthenticated()) {
+      const user = AuthManager.getUser();
+      window.location.href = RoleUtils.getDashboardPage(user.roles);
+  }
+
+  document.getElementById('registerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = UIUtils.showLoading(submitBtn);
+
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (password !== confirmPassword) {
+          UIUtils.hideLoading(submitBtn, originalText);
+          UIUtils.showAlert('Passwords do not match!', 'error');
+          return;
+      }
+
+      const formData = {
+          firstName: document.getElementById('firstName').value,
+          lastName: document.getElementById('lastName').value,
+          username: document.getElementById('username').value,
+          email: document.getElementById('email').value,
+          phoneNumber: document.getElementById('phoneNumber').value,
+          password: password,
+          roles: [document.getElementById('role').value]
+      };
+
+      try {
+          const response = await APIService.signup(formData);
+          UIUtils.createParticles(submitBtn, 30);
+          UIUtils.showAlert('Registration successful! Redirecting to login...', 'success');
+
+          setTimeout(() => {
+              window.location.href = 'login.html';
+          }, 2000);
+
+      } catch (error) {
+          UIUtils.hideLoading(submitBtn, originalText);
+          UIUtils.showAlert(error.message || 'Registration failed', 'error');
+      }
+  });
+
+  // Real-time password validation
+  document.getElementById('confirmPassword').addEventListener('input', function() {
+      const password = document.getElementById('password').value;
+      if (this.value && password !== this.value) {
+          this.style.borderColor = '#ff3366';
+      } else {
+          this.style.borderColor = 'var(--electric-cyan)';
+      }
+  });
+</script>
+</body>
+</html>

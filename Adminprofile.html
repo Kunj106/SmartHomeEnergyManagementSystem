@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Profile - Smart Energy</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="admin.html" class="logo">
+            <div class="logo-icon">⚡</div>
+            <span>SMART ENERGY</span>
+        </a>
+        <ul class="nav-menu"></ul>
+    </div>
+</nav>
+
+<section class="section">
+    <div class="container">
+        <h1 class="fade-in"> ADMIN PROFILE</h1>
+        <p class="text-muted" style="margin-bottom: 3rem;">System administrator account settings</p>
+
+        <!-- ── Account Info + System Overview ── -->
+        <div class="grid grid-2" style="margin-bottom: 3rem;">
+            <div class="card">
+                <h3 style="margin-bottom: 2rem;"> ACCOUNT INFORMATION</h3>
+                <div class="form-group">
+                    <label>USERNAME</label>
+                    <input type="text" id="username" readonly style="background: rgba(0,0,0,0.3);">
+                </div>
+                <div class="form-group">
+                    <label>EMAIL</label>
+                    <input type="email" id="email" readonly style="background: rgba(0,0,0,0.3);">
+                </div>
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label>FIRST NAME</label>
+                        <input type="text" id="firstName" readonly style="background: rgba(0,0,0,0.3);">
+                    </div>
+                    <div class="form-group">
+                        <label>LAST NAME</label>
+                        <input type="text" id="lastName" readonly style="background: rgba(0,0,0,0.3);">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>PHONE NUMBER</label>
+                    <input type="tel" id="phone" readonly style="background: rgba(0,0,0,0.3);">
+                </div>
+                <div class="form-group">
+                    <label>ROLE</label>
+                    <input type="text" id="role" readonly value="ADMINISTRATOR"
+                           style="background: rgba(0,0,0,0.3); color: var(--electric-cyan); font-weight: bold;">
+                </div>
+                <div class="form-group">
+                    <label>ACCOUNT CREATED</label>
+                    <input type="text" id="createdAt" readonly style="background: rgba(0,0,0,0.3);">
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 2rem;"> SYSTEM OVERVIEW</h3>
+                <div class="stat-card" style="margin-bottom: 1rem; background: rgba(0,240,255,0.1); border-color: var(--electric-cyan);">
+                    <div class="stat-value" id="totalUsers" style="color: var(--electric-cyan);">5</div>
+                    <div class="stat-label">TOTAL USERS</div>
+                </div>
+                <div class="stat-card" style="margin-bottom: 1rem; background: rgba(0,102,255,0.1); border-color: var(--neon-blue);">
+                    <div class="stat-value" id="totalLogs" style="color: var(--neon-blue);">6</div>
+                    <div class="stat-label">AUDIT EVENTS TODAY</div>
+                </div>
+                <div class="stat-card" style="margin-bottom: 1rem; background: rgba(255,51,102,0.1); border-color: #ff3366;">
+                    <div class="stat-value" id="errorLogs" style="color: #ff3366;">0</div>
+                    <div class="stat-label">ERROR EVENTS</div>
+                </div>
+                <div class="stat-card" style="background: rgba(0,255,136,0.1); border-color: #00ff88;">
+                    <div class="stat-value" id="systemStatus" style="color: #00ff88;">● ONLINE</div>
+                    <div class="stat-label">SYSTEM STATUS</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── QUICK ACTIONS ── -->
+        <div class="card" style="margin-bottom: 3rem;">
+            <h3 style="margin-bottom: 2rem;">⚡ QUICK ACTIONS</h3>
+            <div class="grid grid-4">
+                <!-- Manage Users
+                <button class="btn btn-primary" id="btnManageUsers"
+                        onclick="QuickActions.openManageUsers()">
+                     MANAGE USERS
+                </button> -->
+
+                <!-- View Logs -->
+                <button class="btn btn-secondary" id="btnViewLogs"
+                        onclick="QuickActions.openViewLogs()">
+                    VIEW LOGS
+                </button>
+
+                <!-- Generate Report -->
+                <button class="btn btn-secondary" id="btnGenerateReport"
+                        onclick="QuickActions.openGenerateReport()">
+                    GENERATE REPORT
+                </button>
+
+                <!-- Backup Data — kept as local action (extend later)
+                <button class="btn btn-secondary" id="btnBackupData"
+                        onclick="handleBackup()">
+                     BACKUP DATA
+                </button> -->
+            </div>
+        </div>
+
+        <!-- ── SYSTEM SETTINGS ── -->
+        <div class="card" style="margin-bottom: 3rem;">
+            <h3 style="margin-bottom: 2rem;"> SYSTEM SETTINGS</h3>
+            <form id="systemSettingsForm" onsubmit="handleSystemSettings(event)">
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label for="maxDevices">MAX DEVICES PER USER</label>
+                        <input type="number" id="maxDevices" value="50" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="energyCost">ENERGY COST (₹/kWh)</label>
+                        <input type="number" id="energyCost" value="6" step="0.01" min="0">
+                    </div>
+                </div>
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label for="maintenanceMode">MAINTENANCE MODE</label>
+                        <select id="maintenanceMode">
+                            <option value="off">Off</option>
+                            <option value="on">On</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="dataRetention">DATA RETENTION (DAYS)</label>
+                        <input type="number" id="dataRetention" value="365" min="30">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary"> SAVE SETTINGS</button>
+            </form>
+        </div>
+
+        <!-- ── SECURITY SETTINGS ── -->
+        <div class="card">
+            <h3 style="margin-bottom: 2rem;"> SECURITY SETTINGS</h3>
+
+            <!-- Password change -->
+            <form id="securityForm" onsubmit="SecurityManager.changePassword(event)">
+                <div class="form-group">
+                    <label for="currentPassword">CURRENT PASSWORD</label>
+                    <input type="password" id="currentPassword"
+                           placeholder="Enter current password" required>
+                </div>
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label for="newPassword">NEW PASSWORD</label>
+                        <input type="password" id="newPassword"
+                               placeholder="Enter new password (min 8 chars)" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">CONFIRM PASSWORD</label>
+                        <input type="password" id="confirmPassword"
+                               placeholder="Confirm new password" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-secondary"> UPDATE PASSWORD</button>
+            </form>
+
+            <hr style="border-color: rgba(0,240,255,0.1); margin: 2rem 0;">
+
+            <!-- Two-Factor Authentication
+            <div style="margin-bottom: 1rem;">
+                <label style="font-family: var(--font-display); font-size: 0.8rem;
+                              letter-spacing: 2px; color: var(--electric-cyan);">
+                     TWO-FACTOR AUTHENTICATION (SMS OTP)
+                </label>
+                <p style="color: var(--text-muted); font-size: 0.82rem; margin: 0.25rem 0 0.75rem;">
+                    Protect your account with a one-time password sent via SMS on every login.
+                </p>
+            </div> -->
+
+            <!-- This div is dynamically rendered by SecurityManager.init() -->
+            <!-- <div id="twoFASection">
+                <div class="qa-loading"><span class="loading"></span> Loading 2FA status…</div>
+            </div>
+        </div> -->
+        </div><!-- /.container -->
+</section>
+
+<!-- Scripts: app.js first, then additions -->
+<script src="app.js"></script>
+
+<script>
+    // ── Auth guard ──────────────────────────────────────────────────
+    if (!AuthManager.isAuthenticated()) {
+        window.location.href = 'login.html';
+    }
+    const _user = AuthManager.getUser();
+    if (RoleUtils.extractRole(_user?.roles) !== 'admin') {
+        alert('Access denied. Admin privileges required.');
+        window.location.href = 'homeowner.html';
+    }
+
+    // ── Populate read-only profile fields ───────────────────────────
+    function loadProfile() {
+        document.getElementById('username').value  = _user.username   || '';
+        document.getElementById('email').value     = _user.email      || '';
+        document.getElementById('firstName').value = _user.firstName  || 'Admin';
+        document.getElementById('lastName').value  = _user.lastName   || 'User';
+        document.getElementById('phone').value     = _user.phoneNumber || 'N/A';
+        document.getElementById('createdAt').value = _user.createdAt
+            ? new Date(_user.createdAt).toLocaleDateString()
+            : new Date().toLocaleDateString();
+    }
+
+    // ── Load system overview stats ──────────────────────────────────
+    async function loadSystemStats() {
+        try {
+            const users = await AdminAPI.getAllUsers();
+            UIUtils.animateCounter(
+                document.getElementById('totalUsers'), 0, users.length, 1000);
+
+            const logData = await AdminAPI.getLogs({ page: 0, size: 1 });
+            const s = logData.summary;
+            UIUtils.animateCounter(
+                document.getElementById('totalLogs'), 0, s.todayCount, 1000);
+            UIUtils.animateCounter(
+                document.getElementById('errorLogs'), 0, s.errorCount, 1000);
+        } catch (err) {
+            console.error('Stats error:', err);
+        }
+    }
+
+    // ── System settings (local storage, extend to API as needed) ────
+    function handleSystemSettings(e) {
+        e.preventDefault();
+        const settings = {
+            maxDevices:       document.getElementById('maxDevices').value,
+            energyCost:       document.getElementById('energyCost').value,
+            maintenanceMode:  document.getElementById('maintenanceMode').value,
+            dataRetention:    document.getElementById('dataRetention').value
+        };
+        localStorage.setItem('system_settings', JSON.stringify(settings));
+        UIUtils.showAlert('System settings saved!', 'success');
+    }
+
+    function loadSettings() {
+        const saved = localStorage.getItem('system_settings');
+        if (!saved) return;
+        const s = JSON.parse(saved);
+        document.getElementById('maxDevices').value      = s.maxDevices      || 50;
+        document.getElementById('energyCost').value      = s.energyCost      || 6;
+        document.getElementById('maintenanceMode').value = s.maintenanceMode || 'off';
+        document.getElementById('dataRetention').value   = s.dataRetention   || 365;
+    }
+
+    // ── Backup (placeholder — extend to /api/admin/backup when ready) ─
+    function handleBackup() {
+        const btn = document.getElementById('btnBackupData');
+        const orig = UIUtils.showLoading(btn);
+        setTimeout(() => {
+            UIUtils.hideLoading(btn, orig);
+            UIUtils.showAlert('Backup completed! (Connect to /api/admin/backup endpoint.)', 'success');
+        }, 1500);
+    }
+
+    // ── Initialise everything ───────────────────────────────────────
+    loadProfile();
+    loadSettings();
+    loadSystemStats();
+    SecurityManager.init();   // loads 2FA status and renders the section
+</script>
+</body>
+</html>

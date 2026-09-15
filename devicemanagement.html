@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Management - Smart Energy</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* MODAL FIX - Inline styles to ensure it works */
+        .modal {
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            /* CRITICAL: Allow scrolling */
+            overflow-y: auto !important;
+            overflow-x: hidden;
+        }
+
+        .modal-content {
+            position: relative;
+            margin: 2rem auto 2rem auto;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            /* CRITICAL: Don't restrict height */
+            max-height: none !important;
+            height: auto !important;
+        }
+
+        /* Ensure form is visible */
+        #deviceForm {
+            width: 100%;
+        }
+
+        /* Add padding at bottom of modal for button visibility */
+        .modal-content::after {
+            content: '';
+            display: block;
+            height: 2rem;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="homeowner.html" class="logo">
+            <div class="logo-icon">⚡</div>
+            <span>SMART ENERGY</span>
+        </a>
+        <ul class="nav-menu"></ul>
+    </div>
+</nav>
+
+<section class="section">
+    <div class="container">
+        <h1 class="fade-in">🔌 DEVICE MANAGEMENT</h1>
+        <p class="text-muted" style="margin-bottom: 3rem;">Add, edit, and monitor all your smart devices</p>
+
+        <div class="card" style="margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h3 style="margin: 0;">Your Devices</h3>
+                    <p class="text-muted" style="margin: 0.5rem 0 0 0;" id="deviceCount">Loading...</p>
+                </div>
+                <button class="btn btn-primary" onclick="showAddDeviceModal()">
+                    <span style="font-size: 1.2rem;">+</span> ADD NEW DEVICE
+                </button>
+            </div>
+        </div>
+
+        <div id="devicesGrid" class="grid grid-3"></div>
+    </div>
+</section>
+
+<!-- Device Modal -->
+<div id="deviceModal" class="modal" style="display: none;">
+    <div class="modal-content card">
+        <h2 id="modalTitle">ADD DEVICE</h2>
+        <form id="deviceForm">
+            <div class="grid grid-2">
+                <div class="form-group">
+                    <label for="deviceName">DEVICE NAME</label>
+                    <input type="text" id="deviceName" required>
+                </div>
+                <div class="form-group">
+                    <label for="deviceType">TYPE</label>
+                    <select id="deviceType" required>
+                        <option value="">Select Type</option>
+                        <option value="Air Conditioner">Air Conditioner</option>
+                        <option value="Refrigerator">Refrigerator</option>
+                        <option value="Water Heater">Water Heater</option>
+                        <option value="Washing Machine">Washing Machine</option>
+                        <option value="Television">Television</option>
+                        <option value="Microwave">Microwave</option>
+                        <option value="Dishwasher">Dishwasher</option>
+                        <option value="Oven">Oven</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid grid-2">
+                <div class="form-group">
+                    <label for="deviceBrand">BRAND</label>
+                    <input type="text" id="deviceBrand" required>
+                </div>
+                <div class="form-group">
+                    <label for="deviceModel">MODEL</label>
+                    <input type="text" id="deviceModel" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="powerRating">POWER RATING (WATTS)</label>
+                <input type="number" id="powerRating" required step="0.01">
+            </div>
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary" style="flex: 1;">SAVE</button>
+                <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeDeviceModal()">CANCEL</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+    if (!AuthManager.isAuthenticated()) window.location.href = 'login.html';
+
+    let currentEditingDeviceId = null;
+
+    async function loadDevices() {
+        const devices = await DeviceManager.loadDevices();
+        document.getElementById('deviceCount').textContent = `${devices.length} device(s) registered`;
+
+        const grid = document.getElementById('devicesGrid');
+        if (devices.length === 0) {
+            grid.innerHTML = '<div class="card" style="grid-column: 1/-1; text-align: center; padding: 3rem;"><h3>No devices yet</h3></div>';
+            return;
+        }
+
+        grid.innerHTML = devices.map(d => `
+            <div class="card">
+                <h4>${d.name}</h4>
+                <p class="text-muted">${d.type}</p>
+                <p>Power: ${d.powerRating}W</p>
+                <p style="color: ${d.status === 'online' ? '#00ff88' : '#ff3366'}">● ${d.status.toUpperCase()}</p>
+                <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                    <button class="btn btn-secondary" style="flex: 1;" onclick="editDevice(${d.id})">Edit</button>
+                    <button class="btn btn-secondary" style="flex: 1;" onclick="deleteDeviceConfirm(${d.id})">Delete</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function showAddDeviceModal() {
+        currentEditingDeviceId = null;
+        document.getElementById('modalTitle').textContent = 'ADD DEVICE';
+        document.getElementById('deviceForm').reset();
+        document.getElementById('deviceModal').style.display = 'block';
+        // Scroll to top of modal
+        document.getElementById('deviceModal').scrollTop = 0;
+    }
+
+    function closeDeviceModal() {
+        document.getElementById('deviceModal').style.display = 'none';
+    }
+
+    async function editDevice(deviceId) {
+        const device = await APIService.getDeviceById(deviceId);
+        currentEditingDeviceId = deviceId;
+        document.getElementById('modalTitle').textContent = 'EDIT DEVICE';
+        document.getElementById('deviceName').value = device.name;
+        document.getElementById('deviceType').value = device.type;
+        document.getElementById('deviceBrand').value = device.brand;
+        document.getElementById('deviceModel').value = device.model;
+        document.getElementById('powerRating').value = device.powerRating;
+        document.getElementById('deviceModal').style.display = 'block';
+        // Scroll to top of modal
+        document.getElementById('deviceModal').scrollTop = 0;
+    }
+
+    async function deleteDeviceConfirm(deviceId) {
+        if (confirm('Delete this device?')) {
+            await DeviceManager.deleteDevice(deviceId);
+            loadDevices();
+        }
+    }
+
+    document.getElementById('deviceForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = {
+            name: document.getElementById('deviceName').value,
+            type: document.getElementById('deviceType').value,
+            brand: document.getElementById('deviceBrand').value,
+            model: document.getElementById('deviceModel').value,
+            powerRating: parseFloat(document.getElementById('powerRating').value),
+            status: 'offline',
+            isActive: true
+        };
+
+        if (currentEditingDeviceId) {
+            await DeviceManager.updateDevice(currentEditingDeviceId, data);
+        } else {
+            await DeviceManager.createDevice(data);
+        }
+        closeDeviceModal();
+        loadDevices();
+    });
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('deviceModal');
+        if (event.target === modal) {
+            closeDeviceModal();
+        }
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeDeviceModal();
+        }
+    });
+
+    loadDevices();
+</script>
+</body>
+</html>

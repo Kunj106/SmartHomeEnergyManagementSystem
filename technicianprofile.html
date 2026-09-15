@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technician Profile - Smart Energy</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="technician.html" class="logo">
+      <div class="logo-icon">⚡</div>
+      <span>SMART ENERGY</span>
+    </a>
+    <ul class="nav-menu"></ul>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container">
+    <h1 class="fade-in"> TECHNICIAN PROFILE</h1>
+    <p class="text-muted" style="margin-bottom: 3rem;">Manage your account, certifications and performance</p>
+
+    <!-- Profile Hero -->
+    <div class="profile-hero tech fade-in">
+      <div class="avatar-wrapper">
+        <div class="avatar-ring tech"></div>
+        <div class="avatar tech" id="avatarInitial">T</div>
+      </div>
+      <div>
+        <div class="role-badge tech"> TECHNICIAN</div>
+        <h2 id="heroUsername" style="font-family: var(--font-display); font-size: 1.7rem; color: #fff; margin: 0 0 0.4rem; letter-spacing: 2px;">—</h2>
+        <p class="text-muted" style="margin: 0; font-size: 0.88rem;">
+
+        </p>
+      </div>
+      <div style="margin-left: auto;">
+        <button class="btn btn-primary btn-tech" onclick="openEditModal()">✏️ EDIT PROFILE</button>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-4" style="margin-bottom: 3rem;">
+      <div class="stat-card">
+        <div class="stat-value">2</div>
+        <div class="stat-label">ACTIVE JOBS</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">15</div>
+        <div class="stat-label">COMPLETED (MONTH)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">4.8</div>
+        <div class="stat-label">AVG RATING</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">98%</div>
+        <div class="stat-label">COMPLETION RATE</div>
+      </div>
+    </div>
+
+    <!-- Main Profile Grid -->
+    <div class="profile-grid">
+
+      <!-- Account Info -->
+      <div class="card">
+        <div class="section-heading tech">ACCOUNT INFORMATION</div>
+        <div class="info-row">
+          <span class="info-label">USERNAME</span>
+          <span class="info-value purple" id="infoUsername">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">EMAIL</span>
+          <span class="info-value" id="infoEmail">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">ROLE</span>
+          <span class="info-value purple">TECHNICIAN</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">EMPLOYEE ID</span>
+          <span class="info-value cyan" id="infoEmpId">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">JOINED</span>
+          <span class="info-value" id="infoJoined">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">STATUS</span>
+          <span class="info-value green">● ACTIVE</span>
+        </div>
+      </div>
+
+      <!-- Personal Info -->
+      <div class="card">
+        <div class="section-heading tech">PERSONAL DETAILS</div>
+        <div class="info-row">
+          <span class="info-label">FULL NAME</span>
+          <span class="info-value" id="infoFullName">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">PHONE</span>
+          <span class="info-value" id="infoPhone">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">SPECIALIZATION</span>
+          <span class="info-value purple" id="infoSpecialization">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">EXPERIENCE</span>
+          <span class="info-value" id="infoExperience">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">SERVICE LOCATION</span>
+          <span class="info-value" id="infoLocation">—</span>
+        </div>
+      </div>
+
+      <!-- Performance Metrics -->
+      <div class="card">
+        <div class="section-heading tech">PERFORMANCE METRICS</div>
+        <div class="metric-row">
+          <div class="metric-header">
+            <span class="metric-label">COMPLETION RATE</span>
+            <span class="metric-value">98%</span>
+          </div>
+          <div class="metric-bar-bg"><div class="metric-bar" data-width="98"></div></div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-header">
+            <span class="metric-label">CUSTOMER SATISFACTION</span>
+            <span class="metric-value">96%</span>
+          </div>
+          <div class="metric-bar-bg"><div class="metric-bar" data-width="96"></div></div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-header">
+            <span class="metric-label">ON-TIME DELIVERY</span>
+            <span class="metric-value">95%</span>
+          </div>
+          <div class="metric-bar-bg"><div class="metric-bar" data-width="95"></div></div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-header">
+            <span class="metric-label">SAFETY COMPLIANCE</span>
+            <span class="metric-value">100%</span>
+          </div>
+          <div class="metric-bar-bg"><div class="metric-bar" data-width="100"></div></div>
+        </div>
+      </div>
+
+      <!-- Job Statistics -->
+      <div class="card">
+        <div class="section-heading tech">JOB STATISTICS</div>
+        <div class="stat-mini-grid">
+          <div class="stat-mini tech">
+            <div class="stat-mini-value tech">2</div>
+            <div class="stat-mini-label">Active Jobs</div>
+          </div>
+          <div class="stat-mini tech">
+            <div class="stat-mini-value tech">15</div>
+            <div class="stat-mini-label">This Month</div>
+          </div>
+          <div class="stat-mini tech">
+            <div class="stat-mini-value tech">5</div>
+            <div class="stat-mini-label">Pending Reviews</div>
+          </div>
+          <div class="stat-mini tech">
+            <div class="stat-mini-value tech">142</div>
+            <div class="stat-mini-label">All Time</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Certifications -->
+      <div class="card">
+        <div class="section-heading tech">CERTIFICATIONS</div>
+        <div class="cert-item">
+          <div class="cert-icon"></div>
+          <div>
+            <div class="cert-name">Licensed Electrician</div>
+            <div class="cert-date">VALID UNTIL DEC 2026</div>
+          </div>
+          <span class="info-value green" style="margin-left: auto; font-size: 0.72rem; font-family: var(--font-display);">ACTIVE</span>
+        </div>
+        <div class="cert-item">
+          <div class="cert-icon"></div>
+          <div>
+            <div class="cert-name">Solar Panel Installer</div>
+            <div class="cert-date">VALID UNTIL JUN 2025</div>
+          </div>
+          <span class="info-value green" style="margin-left: auto; font-size: 0.72rem; font-family: var(--font-display);">ACTIVE</span>
+        </div>
+        <div class="cert-item">
+          <div class="cert-icon"></div>
+          <div>
+            <div class="cert-name">EV Charging Systems</div>
+            <div class="cert-date">VALID UNTIL MAR 2026</div>
+          </div>
+          <span class="info-value green" style="margin-left: auto; font-size: 0.72rem; font-family: var(--font-display);">ACTIVE</span>
+        </div>
+        <div class="cert-item">
+          <div class="cert-icon"></div>
+          <div>
+            <div class="cert-name">Smart Meter Technician</div>
+            <div class="cert-date">VALID UNTIL SEP 2025</div>
+          </div>
+          <span style="margin-left: auto; font-size: 0.72rem; font-family: var(--font-display); color: var(--gold-accent);">RENEW SOON</span>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="card">
+        <div class="section-heading tech">RECENT ACTIVITY</div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background: var(--plasma-purple); box-shadow: 0 0 6px var(--plasma-purple);"></div>
+          <span class="activity-text">Logged into dashboard</span>
+          <span class="activity-time">Just now</span>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background: #00ff88; box-shadow: 0 0 6px #00ff88;"></div>
+          <span class="activity-text">Completed Smart Meter Installation</span>
+          <span class="activity-time">Yesterday</span>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background: var(--electric-cyan); box-shadow: 0 0 6px var(--electric-cyan);"></div>
+          <span class="activity-text">Annual System Check — Green Valley</span>
+          <span class="activity-time">2 days ago</span>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background: var(--gold-accent); box-shadow: 0 0 6px var(--gold-accent);"></div>
+          <span class="activity-text">Filter Replacement — Downtown Office</span>
+          <span class="activity-time">3 days ago</span>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background: var(--neon-blue); box-shadow: 0 0 6px var(--neon-blue);"></div>
+          <span class="activity-text">Sensor Calibration — Residential Complex A</span>
+          <span class="activity-time">3 days ago</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="card">
+      <div class="section-heading tech">ACCOUNT ACTIONS</div>
+      <div class="danger-zone">
+        <h4>⚠ DANGER ZONE</h4>
+        <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 1rem;">These actions are permanent and cannot be undone.</p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <button class="btn-danger" onclick="AuthManager.logout()"> LOGOUT</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Edit Profile Modal -->
+<div id="editModal" class="modal" style="display: none;">
+  <div class="modal-content card" style="max-width: 580px; margin: 4% auto; max-height: 90vh; overflow-y: auto;">
+    <h2 style="color: var(--plasma-purple); font-size: 1rem; letter-spacing: 3px; margin-bottom: 1.5rem;">✏️ EDIT PROFILE</h2>
+
+    <div class="tab-row tech">
+      <button class="tab-btn active tech" onclick="switchTab('tabAccount', this)">ACCOUNT</button>
+      <button class="tab-btn" onclick="switchTab('tabPersonal', this)">PERSONAL</button>
+      <button class="tab-btn" onclick="switchTab('tabPassword', this)">PASSWORD</button>
+    </div>
+
+    <!-- Account Tab -->
+    <div id="tabAccount" class="tab-panel active">
+      <div class="form-group">
+        <label>USERNAME</label>
+        <input type="text" id="editUsername" placeholder="Your username">
+      </div>
+      <div class="form-group">
+        <label>EMAIL ADDRESS</label>
+        <input type="email" id="editEmail" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>EMPLOYEE ID</label>
+        <input type="text" id="editEmpId" placeholder="e.g. TECH-001">
+      </div>
+      <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+        <button class="btn btn-primary btn-tech" style="flex: 1;" onclick="saveAccountInfo()">💾 SAVE</button>
+        <button class="btn btn-secondary" style="flex: 1;" onclick="closeEditModal()">✖ CANCEL</button>
+      </div>
+    </div>
+
+    <!-- Personal Tab -->
+    <div id="tabPersonal" class="tab-panel">
+      <div class="grid grid-2">
+        <div class="form-group">
+          <label>FIRST NAME</label>
+          <input type="text" id="editFirstName" placeholder="First name">
+        </div>
+        <div class="form-group">
+          <label>LAST NAME</label>
+          <input type="text" id="editLastName" placeholder="Last name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>PHONE NUMBER</label>
+        <input type="tel" id="editPhone" placeholder="+91 00000 00000">
+      </div>
+      <div class="form-group">
+        <label>SPECIALIZATION</label>
+        <select id="editSpecialization">
+          <option value="">Select Specialization</option>
+          <option value="Solar Panel Installation">Solar Panel Installation</option>
+          <option value="EV Charging Systems">EV Charging Systems</option>
+          <option value="Smart Meter Installation">Smart Meter Installation</option>
+          <option value="General Electrical">General Electrical</option>
+          <option value="Energy Auditing">Energy Auditing</option>
+        </select>
+      </div>
+      <div class="grid grid-2">
+        <div class="form-group">
+          <label>YEARS OF EXPERIENCE</label>
+          <input type="number" id="editExperience" placeholder="e.g. 5" min="0" max="50">
+        </div>
+        <div class="form-group">
+          <label>SERVICE LOCATION</label>
+          <input type="text" id="editLocation" placeholder="City / Region">
+        </div>
+      </div>
+      <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+        <button class="btn btn-primary btn-tech" style="flex: 1;" onclick="savePersonalInfo()">💾 SAVE</button>
+        <button class="btn btn-secondary" style="flex: 1;" onclick="closeEditModal()">✖ CANCEL</button>
+      </div>
+    </div>
+
+    <!-- Password Tab -->
+    <div id="tabPassword" class="tab-panel">
+      <div class="form-group">
+        <label>CURRENT PASSWORD</label>
+        <input type="password" id="editCurrentPwd" placeholder="Enter current password">
+      </div>
+      <div class="form-group">
+        <label>NEW PASSWORD</label>
+        <input type="password" id="editNewPwd" placeholder="Enter new password" oninput="checkStrength(this.value)">
+        <div class="password-strength-bar-bg">
+          <div class="pw-bar" id="strengthBar"></div>
+        </div>
+        <div class="strength-text" id="strengthText" style="color: var(--text-muted);"></div>
+      </div>
+      <div class="form-group">
+        <label>CONFIRM NEW PASSWORD</label>
+        <input type="password" id="editConfirmPwd" placeholder="Confirm new password">
+      </div>
+      <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+        <button class="btn btn-primary btn-tech" style="flex: 1;" onclick="savePassword()">🔒 UPDATE PASSWORD</button>
+        <button class="btn btn-secondary" style="flex: 1;" onclick="closeEditModal()">✖ CANCEL</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  if (!AuthManager.isAuthenticated()) window.location.href = 'login.html';
+
+  const PROFILE_KEY = 'smart_energy_tech_profile';
+
+  function getLocalProfile() {
+      const raw = localStorage.getItem(PROFILE_KEY);
+      return raw ? JSON.parse(raw) : {};
+  }
+
+  function saveLocalProfile(data) {
+      localStorage.setItem(PROFILE_KEY, JSON.stringify({ ...getLocalProfile(), ...data }));
+  }
+
+  // function populatePage() {
+  //     const user  = AuthManager.getUser();
+  //     const local = getLocalProfile();
+  //     if (!user) return;
+
+  //     document.getElementById('avatarInitial').textContent      = (user.username || 'T')[0].toUpperCase();
+  //     document.getElementById('heroUsername').textContent        = user.username.toUpperCase();
+  //     document.getElementById('infoUsername').textContent        = user.username || '—';
+  //     document.getElementById('infoEmail').textContent           = user.email || local.email || '—';
+  //     document.getElementById('infoEmpId').textContent           = local.empId || 'TECH-' + String(user.id || '001').padStart(3, '0');
+  //     document.getElementById('infoJoined').textContent          = local.joined || 'Feb 2024';
+  //     document.getElementById('infoFullName').textContent        = [local.firstName, local.lastName].filter(Boolean).join(' ') || '—';
+  //     document.getElementById('infoPhone').textContent           = local.phone || '—';
+  //     document.getElementById('infoSpecialization').textContent  = local.specialization || 'General Electrical';
+  //     document.getElementById('infoExperience').textContent      = local.experience ? local.experience + ' years' : '—';
+  //     document.getElementById('infoLocation').textContent        = local.location || '—';
+  // }
+
+  function populatePage() {
+const user  = AuthManager.getUser();
+const local = getLocalProfile();
+if (!user) return;
+
+const displayName =
+  local.firstName
+      ? local.firstName
+      : user.username;
+
+document.getElementById('avatarInitial').textContent =
+  (displayName || 'T')[0].toUpperCase();
+
+document.getElementById('heroUsername').textContent =
+  displayName.toUpperCase();
+
+document.getElementById('infoUsername').textContent =
+  displayName;
+
+document.getElementById('infoEmail').textContent =
+  user.email || local.email || '—';
+
+document.getElementById('infoEmpId').textContent =
+  local.empId || 'TECH-' + String(user.id || '001').padStart(3, '0');
+
+document.getElementById('infoJoined').textContent =
+  local.joined || 'Feb 2024';
+
+document.getElementById('infoFullName').textContent =
+  [local.firstName, local.lastName].filter(Boolean).join(' ') || '—';
+
+document.getElementById('infoPhone').textContent =
+  local.phone || '—';
+
+document.getElementById('infoSpecialization').textContent =
+  local.specialization || 'General Electrical';
+
+document.getElementById('infoExperience').textContent =
+  local.experience ? local.experience + ' years' : '—';
+
+document.getElementById('infoLocation').textContent =
+  local.location || '—';
+}
+
+  function animateBars() {
+      setTimeout(() => {
+          document.querySelectorAll('.metric-bar').forEach(bar => {
+              bar.style.width = bar.getAttribute('data-width') + '%';
+          });
+      }, 400);
+  }
+
+  function switchTab(panelId, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'tech'));
+      document.getElementById(panelId).classList.add('active');
+      btn.classList.add('active', 'tech');
+  }
+
+  function openEditModal() {
+      const user  = AuthManager.getUser();
+      const local = getLocalProfile();
+      document.getElementById('editUsername').value       = user.username || '';
+      document.getElementById('editEmail').value          = user.email || local.email || '';
+      document.getElementById('editEmpId').value          = local.empId || '';
+      document.getElementById('editFirstName').value      = local.firstName || '';
+      document.getElementById('editLastName').value       = local.lastName || '';
+      document.getElementById('editPhone').value          = local.phone || '';
+      document.getElementById('editSpecialization').value = local.specialization || '';
+      document.getElementById('editExperience').value     = local.experience || '';
+      document.getElementById('editLocation').value       = local.location || '';
+      document.getElementById('editModal').style.display  = 'block';
+  }
+
+  function closeEditModal() {
+      document.getElementById('editModal').style.display = 'none';
+  }
+
+  function saveAccountInfo() {
+      saveLocalProfile({
+          empId: document.getElementById('editEmpId').value.trim(),
+          email: document.getElementById('editEmail').value.trim()
+      });
+      populatePage();
+      closeEditModal();
+      UIUtils.showAlert('Account info updated!', 'success');
+  }
+
+  function savePersonalInfo() {
+      saveLocalProfile({
+          firstName:      document.getElementById('editFirstName').value.trim(),
+          lastName:       document.getElementById('editLastName').value.trim(),
+          phone:          document.getElementById('editPhone').value.trim(),
+          specialization: document.getElementById('editSpecialization').value,
+          experience:     document.getElementById('editExperience').value.trim(),
+          location:       document.getElementById('editLocation').value.trim()
+      });
+      populatePage();
+      closeEditModal();
+      UIUtils.showAlert('Personal info updated!', 'success');
+  }
+
+  function savePassword() {
+      const current = document.getElementById('editCurrentPwd').value;
+      const newPwd  = document.getElementById('editNewPwd').value;
+      const confirm = document.getElementById('editConfirmPwd').value;
+      if (!current)          { UIUtils.showAlert('Enter your current password.', 'error'); return; }
+      if (newPwd.length < 6) { UIUtils.showAlert('Password must be at least 6 characters.', 'error'); return; }
+      if (newPwd !== confirm) { UIUtils.showAlert('Passwords do not match.', 'error'); return; }
+      UIUtils.showAlert('Password updated successfully!', 'success');
+      closeEditModal();
+  }
+
+  function checkStrength(val) {
+      const bar  = document.getElementById('strengthBar');
+      const text = document.getElementById('strengthText');
+      if (!val) { bar.style.width = '0%'; text.textContent = ''; return; }
+      if (val.length < 6) {
+          bar.style.cssText = 'width:33%; background:#ff3366;';
+          text.style.color = '#ff3366'; text.textContent = 'WEAK';
+      } else if (val.length < 10 || !/[^a-zA-Z0-9]/.test(val)) {
+          bar.style.cssText = 'width:66%; background:var(--gold-accent);';
+          text.style.color = 'var(--gold-accent)'; text.textContent = 'MEDIUM';
+      } else {
+          bar.style.cssText = 'width:100%; background:#00ff88;';
+          text.style.color = '#00ff88'; text.textContent = 'STRONG';
+      }
+  }
+
+  window.onclick = e => {
+      if (e.target === document.getElementById('editModal')) closeEditModal();
+  };
+
+  populatePage();
+  animateBars();
+</script>
+</body>
+</html>

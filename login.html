@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Smart Energy</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="login.html" class="logo">
+      <div class="logo-icon">⚡</div>
+      <span>SMART ENERGY</span>
+    </a>
+    <ul class="nav-menu"></ul>
+  </div>
+</nav>
+
+<div class="card fade-in">
+  <h2 style="text-align: center; margin-bottom: 0.5rem;">WELCOME BACK</h2>
+  <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">
+    Access your energy command center
+  </p>
+
+  <div id="alert-container"></div>
+
+  <form id="loginForm">
+    <div class="form-group">
+      <label for="username">USERNAME</label>
+      <input type="text" id="username" placeholder="Enter your username" required>
+    </div>
+
+    <div class="form-group">
+      <label for="password">PASSWORD</label>
+      <input type="password" id="password" placeholder="Enter your password" required>
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">
+        SIGN IN
+      </button>
+    </div>
+  </form>
+
+  <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(0, 240, 255, 0.2);">
+    <p style="color: var(--text-muted);">
+      New to Smart Energy?
+      <a href="register.html" style="color: var(--electric-cyan); text-decoration: none; font-weight: 700;">
+        Create Account →
+      </a>
+    </p>
+  </div>
+</div>
+</div>
+</section>
+
+<script src="app.js"></script>
+<script>
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+
+      if (!username || !password) {
+          UIUtils.showAlert('Please enter your username and password.', 'error');
+          return;
+      }
+
+      try {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = 'LOGGING IN...';
+
+          const response = await APIService.signin({ username, password });
+
+          if (!response || !response.token) {
+              throw new Error('Login succeeded but no authentication token was returned.');
+          }
+
+          AuthManager.saveToken(response.token);
+          AuthManager.saveUser({
+              id: response.id,
+              username: response.username || username,
+              email: response.email || '',
+              roles: response.roles || []
+          });
+
+          UIUtils.createParticles(submitBtn, 25);
+          UIUtils.showAlert('Login successful! Redirecting...', 'success');
+
+          setTimeout(() => {
+              window.location.href = RoleUtils.getDashboardPage(response.roles);
+          }, 700);
+
+      } catch (error) {
+          console.error('Login failed:', error);
+          UIUtils.showAlert(error.message || 'Login failed. Please try again.', 'error');
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+      }
+  });
+</script>
+</body>
+</html>

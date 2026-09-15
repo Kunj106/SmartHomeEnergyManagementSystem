@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homeowner Dashboard - Smart Energy</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="homeowner.html" class="logo">
+      <div class="logo-icon">⚡</div>
+      <span>SMART ENERGY</span>
+    </a>
+    <ul class="nav-menu"></ul>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container">
+    <div class="fade-in">
+      <h1 id="welcomeMsg" style="margin-bottom: 0.5rem;">HOMEOWNER DASHBOARD</h1>
+      <p class="text-muted" style="margin-bottom: 3rem;">Monitor and manage your energy consumption</p>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="grid grid-4" style="margin-bottom: 3rem;" id="statsGrid">
+      <div class="stat-card">
+        <div class="stat-value" id="totalDevices">7</div>
+        <div class="stat-label">TOTAL DEVICES</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="activeDevices">5</div>
+        <div class="stat-label">ACTIVE DEVICES</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="totalPower">89</div>
+        <div class="stat-label">TOTAL POWER (kW)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="monthlyCost">₹2331</div>
+        <div class="stat-label">MONTHLY COST</div>
+      </div>
+    </div>
+
+    <!-- Energy Charts -->
+    <div class="grid grid-2" style="margin-bottom: 3rem;">
+      <div class="card">
+        <h3 style="margin-bottom: 2rem;"> HOURLY CONSUMPTION (TODAY)</h3>
+        <div style="height: 300px;">
+          <canvas id="hourlyChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom: 2rem;"> DAILY CONSUMPTION (30 DAYS)</h3>
+        <div style="height: 300px;">
+          <canvas id="dailyChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- My Devices -->
+    <div class="card" style="margin-bottom: 3rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h3 style="margin: 0;"> MY DEVICES</h3>
+        <button class="btn btn-primary" onclick="showAddDeviceModal()">
+          <span>+</span> ADD DEVICE
+        </button>
+      </div>
+      <div id="devicesGrid" class="grid grid-3">
+        <!-- Devices will be loaded here -->
+      </div>
+    </div>
+
+    <!-- Consumption by Device Type -->
+    <div class="card">
+      <h3 style="margin-bottom: 2rem;"> CONSUMPTION BY DEVICE TYPE</h3>
+      <div style="height: 400px;">
+        <canvas id="deviceTypeChart"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Add/Edit Device Modal -->
+<div id="deviceModal" class="modal" style="display: none;">
+  <div class="modal-content card" style="max-width: 600px; margin: 5% auto;">
+    <h2 id="modalTitle">ADD DEVICE</h2>
+    <form id="deviceForm">
+      <div class="grid grid-2">
+        <div class="form-group">
+          <label for="deviceName">DEVICE NAME</label>
+          <input type="text" id="deviceName" required placeholder="e.g., Living Room AC">
+        </div>
+        <div class="form-group">
+          <label for="deviceType">TYPE</label>
+          <select id="deviceType" required>
+            <option value="">Select Type</option>
+            <option value="Air Conditioner">Air Conditioner</option>
+            <option value="Refrigerator">Refrigerator</option>
+            <option value="Water Heater">Water Heater</option>
+            <option value="Washing Machine">Washing Machine</option>
+            <option value="Television">Television</option>
+            <option value="Microwave">Microwave</option>
+            <option value="Dishwasher">Dishwasher</option>
+            <option value="Oven">Oven</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="form-group">
+          <label for="deviceBrand">BRAND</label>
+          <input type="text" id="deviceBrand" required placeholder="e.g., LG">
+        </div>
+        <div class="form-group">
+          <label for="deviceModel">MODEL</label>
+          <input type="text" id="deviceModel" required placeholder="e.g., AC-2000">
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="form-group">
+          <label for="powerRating">POWER RATING (WATTS)</label>
+          <input type="number" id="powerRating" required step="0.01" placeholder="e.g., 2500">
+        </div>
+        <div class="form-group">
+          <label for="voltageRating">VOLTAGE (VOLTS)</label>
+          <input type="number" id="voltageRating" step="0.01" placeholder="e.g., 220">
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="form-group">
+          <label for="energyStar">ENERGY STAR RATING</label>
+          <select id="energyStar">
+            <option value="">Not Rated</option>
+            <option value="1">⭐ 1 Star</option>
+            <option value="2">⭐⭐ 2 Stars</option>
+            <option value="3">⭐⭐⭐ 3 Stars</option>
+            <option value="4">⭐⭐⭐⭐ 4 Stars</option>
+            <option value="5">⭐⭐⭐⭐⭐ 5 Stars</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="deviceLocation">LOCATION</label>
+          <input type="text" id="deviceLocation" placeholder="e.g., Living Room">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="deviceNotes">NOTES (OPTIONAL)</label>
+        <textarea id="deviceNotes" rows="3" placeholder="Additional information about the device"></textarea>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button type="submit" class="btn btn-primary" style="flex: 1;">
+          SAVE DEVICE
+        </button>
+        <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeDeviceModal()">
+          CANCEL
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  if (!AuthManager.isAuthenticated()) {
+      window.location.href = 'login.html';
+  }
+
+  const user = AuthManager.getUser();
+ document.getElementById('welcomeMsg').textContent =`WELCOME, HOMEOWNER! `;
+
+  let currentEditingDeviceId = null;
+
+  // Load dashboard data
+  async function loadDashboard() {
+      try {
+          // Load statistics
+          const stats = await APIService.getDeviceStatistics();
+          document.getElementById('totalDevices').textContent = stats.totalDevices || 0;
+          document.getElementById('activeDevices').textContent = stats.activeDevices || 0;
+          document.getElementById('totalPower').textContent = Math.round(stats.totalPowerRating || 0);
+
+          // Load consumption summary
+          const summary = await APIService.getConsumptionSummary();
+          document.getElementById('monthlyCost').textContent = '₹2388';
+
+          // Load devices
+          await loadDevices();
+
+          // Load charts
+          ChartManager.createHourlyChart('hourlyChart');
+          ChartManager.createDailyChart('dailyChart');
+          ChartManager.createDeviceTypeChart('deviceTypeChart');
+
+      } catch (error) {
+          console.error('Error loading dashboard:', error);
+      }
+  }
+
+  // Load devices
+  async function loadDevices() {
+      try {
+          const devices = await DeviceManager.loadDevices();
+          const grid = document.getElementById('devicesGrid');
+
+          if (devices.length === 0) {
+              grid.innerHTML = `
+                  <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                      <h3 style="color: var(--text-muted);">No devices yet</h3>
+                      <p>Click "ADD DEVICE" to get started</p>
+                  </div>
+              `;
+              return;
+          }
+
+          grid.innerHTML = devices.map(device => {
+              const statusColor = device.status === 'online' ? '#00ff88' :
+                                 device.status === 'offline' ? '#ff3366' : '#FFD700';
+              const statusIcon = device.status === 'online' ? '●' :
+                                device.status === 'offline' ? '○' : '◐';
+
+              return `
+                  <div class="card device-card" data-device-id="${device.id}">
+                      <div style="display: flex; justify-content: between; align-items: start; margin-bottom: 1rem;">
+                          <h4 style="font-family: var(--font-display); flex: 1;">${device.name}</h4>
+                          <div style="display: flex; gap: 0.5rem;">
+                              <button class="btn-icon" onclick="editDevice(${device.id})" title="Edit">
+                                  ✏️
+                              </button>
+                              <button class="btn-icon" onclick="deleteDeviceConfirm(${device.id})" title="Delete">
+
+                              </button>
+                          </div>
+                      </div>
+                      <p style="color: ${statusColor}; margin: 0.5rem 0; font-weight: 600;">
+                          ${statusIcon} ${device.status.toUpperCase()}
+                      </p>
+                      <p class="text-muted" style="margin: 0.5rem 0;">
+                          ${device.type} • ${device.brand}
+                      </p>
+                      <p class="text-muted" style="margin: 0.5rem 0;">
+                          Power: ${device.powerRating}W
+                      </p>
+                      ${device.location ? `<p class="text-muted">📍 ${device.location}</p>` : ''}
+                      <button class="btn ${device.status === 'online' ? 'btn-secondary' : 'btn-primary'}"
+                              style="width: 100%; margin-top: 1rem;"
+                              onclick="toggleDevice(${device.id}, '${device.status}')">
+                          ${device.status === 'online' ? 'TURN OFF' : 'TURN ON'}
+                      </button>
+                  </div>
+              `;
+          }).join('');
+
+      } catch (error) {
+          console.error('Error loading devices:', error);
+      }
+  }
+
+  // Show add device modal
+  function showAddDeviceModal() {
+      currentEditingDeviceId = null;
+      document.getElementById('modalTitle').textContent = 'ADD DEVICE';
+      document.getElementById('deviceForm').reset();
+      document.getElementById('deviceModal').style.display = 'block';
+  }
+
+  // Edit device
+  async function editDevice(deviceId) {
+      try {
+          const device = await APIService.getDeviceById(deviceId);
+          currentEditingDeviceId = deviceId;
+
+          document.getElementById('modalTitle').textContent = 'EDIT DEVICE';
+          document.getElementById('deviceName').value = device.name;
+          document.getElementById('deviceType').value = device.type;
+          document.getElementById('deviceBrand').value = device.brand;
+          document.getElementById('deviceModel').value = device.model;
+          document.getElementById('powerRating').value = device.powerRating;
+          document.getElementById('voltageRating').value = device.voltageRating || '';
+          document.getElementById('energyStar').value = device.energyStarRating || '';
+          document.getElementById('deviceLocation').value = device.location || '';
+          document.getElementById('deviceNotes').value = device.notes || '';
+
+          document.getElementById('deviceModal').style.display = 'block';
+      } catch (error) {
+          UIUtils.showAlert('Failed to load device details', 'error');
+      }
+  }
+
+  // Close modal
+  function closeDeviceModal() {
+      document.getElementById('deviceModal').style.display = 'none';
+      currentEditingDeviceId = null;
+  }
+
+  // Handle device form submission
+  document.getElementById('deviceForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = UIUtils.showLoading(submitBtn);
+
+      const deviceData = {
+          name: document.getElementById('deviceName').value,
+          type: document.getElementById('deviceType').value,
+          brand: document.getElementById('deviceBrand').value,
+          model: document.getElementById('deviceModel').value,
+          powerRating: parseFloat(document.getElementById('powerRating').value),
+          voltageRating: parseFloat(document.getElementById('voltageRating').value) || null,
+          energyStarRating: parseInt(document.getElementById('energyStar').value) || null,
+          location: document.getElementById('deviceLocation').value,
+          notes: document.getElementById('deviceNotes').value,
+          status: 'offline',
+          isActive: true
+      };
+
+      try {
+          if (currentEditingDeviceId) {
+              await DeviceManager.updateDevice(currentEditingDeviceId, deviceData);
+          } else {
+              await DeviceManager.createDevice(deviceData);
+          }
+
+          closeDeviceModal();
+          await loadDashboard();
+      } catch (error) {
+          UIUtils.hideLoading(submitBtn, originalText);
+      }
+  });
+
+  // Toggle device status
+  async function toggleDevice(deviceId, currentStatus) {
+      try {
+          await DeviceManager.toggleDeviceStatus(deviceId, currentStatus);
+          await loadDevices();
+      } catch (error) {
+          console.error('Error toggling device:', error);
+      }
+  }
+
+  // Delete device
+  async function deleteDeviceConfirm(deviceId) {
+      if (confirm('Are you sure you want to delete this device?')) {
+          try {
+              await DeviceManager.deleteDevice(deviceId);
+              await loadDashboard();
+          } catch (error) {
+              console.error('Error deleting device:', error);
+          }
+      }
+  }
+
+  // Load dashboard on page load
+  loadDashboard();
+
+  // Close modal when clicking outside
+  window.onclick = function(event) {
+      const modal = document.getElementById('deviceModal');
+      if (event.target === modal) {
+          closeDeviceModal();
+      }
+  }
+</script>
+
+<style>
+  .modal {
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.3s ease;
+  }
+
+  .modal-content {
+      animation: slideUp 0.4s ease;
+  }
+
+  .btn-icon {
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+  }
+
+  .btn-icon:hover {
+      transform: scale(1.2);
+  }
+
+  .device-card {
+      transition: all 0.3s ease;
+  }
+
+  .device-card:hover {
+      transform: translateY(-5px) scale(1.02);
+  }
+
+  textarea {
+      width: 100%;
+      padding: var(--space-sm) var(--space-md);
+      background: rgba(31, 41, 55, 0.5);
+      border: 2px solid rgba(0, 240, 255, 0.3);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      resize: vertical;
+  }
+
+  textarea:focus {
+      border-color: var(--electric-cyan);
+      background: rgba(31, 41, 55, 0.8);
+      box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.2);
+  }
+</style>
+</body>
+</html>

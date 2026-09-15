@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - Smart Energy</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="homeowner.html" class="logo">
+      <div class="logo-icon">⚡</div>
+      <span>SMART ENERGY</span>
+    </a>
+    <ul class="nav-menu"></ul>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container">
+    <h1 class="fade-in">👤 MY PROFILE</h1>
+    <p class="text-muted" style="margin-bottom: 3rem;">Manage your account and energy preferences</p>
+
+    <!-- Profile Info -->
+    <div class="grid grid-2" style="margin-bottom: 3rem;">
+      <div class="card">
+        <h3 style="margin-bottom: 2rem;"> ACCOUNT INFORMATION</h3>
+        <div id="profileInfo">
+          <div class="form-group">
+            <label>USERNAME</label>
+            <input type="text" id="username" readonly style="background: rgba(0,0,0,0.3);">
+          </div>
+          <div class="form-group">
+            <label>EMAIL</label>
+            <input type="email" id="email" readonly style="background: rgba(0,0,0,0.3);">
+          </div>
+          <div class="grid grid-2">
+            <div class="form-group">
+              <label>FIRST NAME</label>
+              <input type="text" id="firstName" readonly style="background: rgba(0,0,0,0.3);">
+            </div>
+            <div class="form-group">
+              <label>LAST NAME</label>
+              <input type="text" id="lastName" readonly style="background: rgba(0,0,0,0.3);">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>PHONE NUMBER</label>
+            <input type="tel" id="phone" readonly style="background: rgba(0,0,0,0.3);">
+          </div>
+          <div class="form-group">
+            <label>ROLE</label>
+            <input type="text" id="role" readonly style="background: rgba(0,0,0,0.3);">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom: 2rem;"> ENERGY OVERVIEW</h3>
+        <div class="stat-card" style="margin-bottom: 1rem;">
+          <div class="stat-value" id="totalDevices">7</div>
+          <div class="stat-label">TOTAL DEVICES</div>
+        </div>
+        <div class="stat-card" style="margin-bottom: 1rem;">
+          <div class="stat-value" id="monthlyConsumption">2427 kWh</div>
+          <div class="stat-label">MONTHLY CONSUMPTION</div>
+        </div>
+        <div class="stat-card" style="margin-bottom: 1rem;">
+          <div class="stat-value" id="estimatedCost">₹2388</div>
+          <div class="stat-label">ESTIMATED COST</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="activeDevices">5</div>
+          <div class="stat-label">ACTIVE DEVICES</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Energy Preferences -->
+    <div class="card" style="margin-bottom: 3rem;">
+      <h3 style="margin-bottom: 2rem;"> ENERGY PREFERENCES</h3>
+      <form id="preferencesForm">
+        <div class="grid grid-2">
+          <div class="form-group">
+            <label for="householdSize">HOUSEHOLD SIZE</label>
+            <select id="householdSize">
+              <option value="1">1 Person</option>
+              <option value="2">2 People</option>
+              <option value="3">3 People</option>
+              <option value="4">4 People</option>
+              <option value="5">5+ People</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="propertySize">PROPERTY SIZE (sq ft)</label>
+            <input type="number" id="propertySize" placeholder="e.g., 1500">
+          </div>
+        </div>
+        <div class="grid grid-2">
+          <div class="form-group">
+            <label for="energyGoal">MONTHLY ENERGY GOAL (kWh)</label>
+            <input type="number" id="energyGoal" placeholder="e.g., 500">
+          </div>
+          <div class="form-group">
+            <label for="avgConsumption">AVERAGE MONTHLY USAGE (kWh)</label>
+            <input type="number" id="avgConsumption" placeholder="e.g., 600">
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">
+            SAVE PREFERENCES
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Change Password -->
+    <div class="card">
+      <h3 style="margin-bottom: 2rem;"> CHANGE PASSWORD</h3>
+      <form id="passwordForm">
+        <div class="form-group">
+          <label for="currentPassword">CURRENT PASSWORD</label>
+          <input type="password" id="currentPassword" placeholder="Enter current password" required>
+        </div>
+        <div class="grid grid-2">
+          <div class="form-group">
+            <label for="newPassword">NEW PASSWORD</label>
+            <input type="password" id="newPassword" placeholder="Enter new password" required>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">CONFIRM PASSWORD</label>
+            <input type="password" id="confirmPassword" placeholder="Confirm new password" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-secondary">
+            UPDATE PASSWORD
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script src="app.js"></script>
+<script>
+  if (!AuthManager.isAuthenticated()) {
+      window.location.href = 'login.html';
+  }
+
+  // Load user profile
+  function loadProfile() {
+      const user = AuthManager.getUser();
+
+      document.getElementById('username').value = 'homeowner';;
+      document.getElementById('email').value = 'homeowner234@gmail.com';
+      document.getElementById('firstName').value =  'Riya';
+      document.getElementById('lastName').value = 'Patil';
+      document.getElementById('phone').value =  '9237389791';
+
+      const role = RoleUtils.extractRole(user.roles);
+      document.getElementById('role').value = role.toUpperCase();
+  }
+
+  // Load energy stats
+  async function loadEnergyStats() {
+      try {
+          const stats = await APIService.getDeviceStatistics();
+          document.getElementById('totalDevices').textContent = stats.totalDevices || 0;
+          document.getElementById('activeDevices').textContent = stats.activeDevices || 0;
+
+          const summary = await APIService.getConsumptionSummary();
+          document.getElementById('monthlyConsumption').textContent = (summary.totalEnergy || 0).toFixed(2) + ' kWh';
+          document.getElementById('monthlyCost').textContent = '$' + (summary.estimatedCost || 0).toFixed(2);
+      } catch (error) {
+          console.error('Error loading stats:', error);
+      }
+  }
+
+  // Handle preferences form
+  document.getElementById('preferencesForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const preferences = {
+          householdSize: document.getElementById('householdSize').value,
+          propertySize: parseFloat(document.getElementById('propertySize').value),
+          energyGoal: parseFloat(document.getElementById('energyGoal').value),
+          avgConsumption: parseFloat(document.getElementById('avgConsumption').value)
+      };
+
+      // Save to localStorage for now (you can add API endpoint later)
+      localStorage.setItem('energy_preferences', JSON.stringify(preferences));
+
+      if (typeof UIUtils !== 'undefined') {
+          UIUtils.showAlert('Preferences saved successfully!', 'success');
+      } else {
+          alert('Preferences saved successfully!');
+      }
+  });
+
+  // Handle password change
+  document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (newPassword !== confirmPassword) {
+          alert('New passwords do not match!');
+          return;
+      }
+
+      if (newPassword.length < 6) {
+          alert('Password must be at least 6 characters long!');
+          return;
+      }
+
+      // TODO: Implement password change API
+      alert('Password change functionality coming soon!');
+
+      // Clear form
+      document.getElementById('passwordForm').reset();
+  });
+
+  // Load saved preferences
+  function loadPreferences() {
+      const saved = localStorage.getItem('energy_preferences');
+      if (saved) {
+          const prefs = JSON.parse(saved);
+          document.getElementById('householdSize').value = prefs.householdSize || '4';
+          document.getElementById('propertySize').value = prefs.propertySize || '';
+          document.getElementById('energyGoal').value = prefs.energyGoal || '';
+          document.getElementById('avgConsumption').value = prefs.avgConsumption || '';
+      }
+  }
+
+  // Initialize
+  loadProfile();
+  loadEnergyStats();
+  loadPreferences();
+</script>
+</body>
+</html>
