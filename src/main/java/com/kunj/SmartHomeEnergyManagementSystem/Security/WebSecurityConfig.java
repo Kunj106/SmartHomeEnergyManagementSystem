@@ -94,8 +94,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http)
-            throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
                 .csrf(csrf -> csrf.disable())
@@ -104,46 +103,29 @@ public class WebSecurityConfig {
                         cors.configurationSource(corsConfigurationSource()))
 
                 .exceptionHandling(exception ->
-                        exception.authenticationEntryPoint(
-                                unauthorizedHandler))
+                        exception.authenticationEntryPoint(unauthorizedHandler))
 
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(
-                                SessionCreationPolicy.STATELESS))
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
 
-                        // Allow CORS preflight requests
-                        .requestMatchers(HttpMethod.OPTIONS, "/**")
-                        .permitAll()
-
-                        // Login and registration
-                        .requestMatchers("/api/auth/**")
-                        .permitAll()
+                        // Public endpoints
+                        .requestMatchers("/", "/error").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
 
                         // Swagger
-                        .requestMatchers("/swagger-ui/**")
-                        .permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/swagger-ui.html").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
 
-                        .requestMatchers("/swagger-ui.html")
-                        .permitAll()
+                        // Protected endpoints
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/homeowner/**").hasRole("HOMEOWNER")
+                        .requestMatchers("/api/technician/**").hasRole("TECHNICIAN")
 
-                        .requestMatchers("/v3/api-docs/**")
-                        .permitAll()
-
-                        // Role-based APIs
-                        .requestMatchers("/api/admin/**")
-                        .hasRole("ADMIN")
-
-                        .requestMatchers("/api/homeowner/**")
-                        .hasRole("HOMEOWNER")
-
-                        .requestMatchers("/api/technician/**")
-                        .hasRole("TECHNICIAN")
-
-                        // Everything else requires authentication
-                        .anyRequest()
-                        .authenticated()
+                        .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());
