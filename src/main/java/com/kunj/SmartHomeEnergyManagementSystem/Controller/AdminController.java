@@ -249,9 +249,4 @@ public class AdminController {
         return Map.of("error", msg);
     }
 
-
-    private void auditInfo(Long userId, String action, String description,
-                           String entityType, Long entityId, String ip) {
-        auditLogService.logAction(userId, action, description, "INFO", entityType, entityId, ip);
-    }
 }

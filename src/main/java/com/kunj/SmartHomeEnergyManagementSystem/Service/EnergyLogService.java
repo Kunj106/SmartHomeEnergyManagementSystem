@@ -77,20 +77,6 @@ public class EnergyLogService
         return mapToLogResponse(savedLog);
     }
 
-    // Get hourly consumption data for graphs (today)
-//    public List<GraphDataPoint> getHourlyConsumption() {
-//        User currentUser = getCurrentUser();
-//        List<EnergyLog> logs = energyLogRepository.getTodayHourlyLogsByUser(currentUser);
-//
-//        return logs.stream()
-//                .map(log -> new GraphDataPoint(
-//                        log.getTimestamp().format(DateTimeFormatter.ofPattern("HH:00")),
-//                        log.getEnergyConsumed(),
-//                        log.getTimestamp()
-//                ))
-//                .collect(Collectors.toList());
-//    }
-
     // Get hourly consumption data for graphs (6 AM - 12 PM today)
     public List<GraphDataPoint> getHourlyConsumption() {
         User currentUser = getCurrentUser();
@@ -210,33 +196,6 @@ public class EnergyLogService
         return logs.stream().map(this::mapToLogResponse).collect(Collectors.toList());
     }
 
-    // Generate hourly logs automatically (for simulation/testing)
-//    @Transactional
-//    public void generateHourlyLogs() {
-//        User currentUser = getCurrentUser();
-//        List<Device> activeDevices = deviceRepository.findByOwnerAndIsActive(currentUser, true);
-//
-//        LocalDateTime now = LocalDateTime.now();
-//        LocalDateTime hourStart = now.withMinute(0).withSecond(0).withNano(0);
-//
-//        for (Device device : activeDevices) {
-//            // Simulate energy consumption based on power rating
-//            double powerKW = device.getPowerRating() / 1000.0; // Convert W to kW
-//            double energyConsumed = powerKW * 1.0; // 1 hour
-//
-//            EnergyLog log = new EnergyLog();
-//            log.setDevice(device);
-//            log.setUser(currentUser);
-//            log.setTimestamp(hourStart);
-//            log.setEnergyConsumed(energyConsumed);
-//            log.setPowerWatts(device.getPowerRating());
-//            log.setDurationMinutes(60);
-//            log.setCostEstimate(energyConsumed * COST_PER_KWH);
-//            log.setLogType("hourly");
-//
-//            energyLogRepository.save(log);
-//        }
-//    }
     // Generate hourly logs for 6 AM to 12 PM (for testing)
     @Transactional
     public void generateHourlyLogs() {
